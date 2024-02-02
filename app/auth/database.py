@@ -8,16 +8,16 @@ from fastapi_users.db import (
 from fastapi_users_db_sqlalchemy import UUID_ID, SQLAlchemyBaseUserTableUUID
 from fastapi_users_db_sqlalchemy.generics import GUID
 import uuid
-from sqlalchemy import TIMESTAMP, ForeignKey, Integer, String, Boolean
+from sqlalchemy import TIMESTAMP, ForeignKey, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
+from models.base import Base
 
 from config import DB_PASSWORD, DB_USERNAME
-from models.base import Base
 
 DATABASE_URL = (
     f"postgresql+asyncpg://{DB_USERNAME}:{DB_PASSWORD}@localhost/test"
@@ -34,9 +34,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     email: Mapped[str] = mapped_column(
         String(length=320), unique=True, nullable=False
     )
-    role_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("role.id")
-    )
+    role_id: Mapped[int] = mapped_column(ForeignKey("role.id"))
     hashed_password: Mapped[str] = mapped_column(
         String(length=1024), nullable=False
     )
@@ -55,6 +53,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
 
 engine = create_async_engine(DATABASE_URL)
+
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 
