@@ -5,7 +5,9 @@ from fastapi import Depends
 from fastapi_users.db import (
     SQLAlchemyUserDatabase,
 )
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from fastapi_users_db_sqlalchemy import UUID_ID, SQLAlchemyBaseUserTableUUID
+from fastapi_users_db_sqlalchemy.generics import GUID
+import uuid
 from sqlalchemy import TIMESTAMP, ForeignKey, Integer, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.asyncio import (
@@ -22,24 +24,24 @@ DATABASE_URL = (
 )
 
 
-class User(SQLAlchemyBaseUserTable[int], Base):
-    id: Mapped[int] = mapped_column(
-        Integer, primary_key=True
+class User(SQLAlchemyBaseUserTableUUID, Base):
+    id: Mapped[UUID_ID] = mapped_column(
+        GUID, primary_key=True, default=uuid.uuid4
     )
     username: Mapped[str] = mapped_column(
-        String(length=150), unique=True, index=True, nullable=False
+        String(length=150), unique=True, nullable=False
     )
     email: Mapped[str] = mapped_column(
-        String(length=320), unique=True, index=True, nullable=False
-    )
-    registred_at: Mapped[str] = mapped_column(
-        TIMESTAMP, default=datetime.utcnow(), nullable=False
+        String(length=320), unique=True, nullable=False
     )
     role_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("role.id")
     )
     hashed_password: Mapped[str] = mapped_column(
         String(length=1024), nullable=False
+    )
+    registred_at: Mapped[str] = mapped_column(
+        TIMESTAMP, default=datetime.utcnow(), nullable=False
     )
     is_active: Mapped[bool] = mapped_column(
         Boolean, default=True, nullable=False
