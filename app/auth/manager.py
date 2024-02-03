@@ -23,7 +23,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_register(
         self, user: User, request: Optional[Request] = None
     ):
-        print(f"User {user.id} has registered.")
+        print(f"User {user.username} has registered.")
 
     async def create(
         self,

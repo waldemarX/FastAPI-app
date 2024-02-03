@@ -2,14 +2,14 @@ import uuid
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
 from auth.manager import get_user_manager
-from auth.database import User
+from models.models import UserTable
 
 from auth.auth import auth_backend
 from auth.schemas import UserCreate, UserRead
 
 app = FastAPI(title="Trading App")
 
-fastapi_users = FastAPIUsers[User, uuid.UUID](
+fastapi_users = FastAPIUsers[UserTable, uuid.UUID](
     get_user_manager,
     [auth_backend],
 )
