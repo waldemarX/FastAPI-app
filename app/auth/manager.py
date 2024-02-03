@@ -10,7 +10,8 @@ from fastapi_users import (
     models,
 )
 
-from .database import User, get_user_db
+from .models import User
+from database import get_user_db
 from config import SECRET_KEY
 
 SECRET = SECRET_KEY
@@ -46,9 +47,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         password = user_dict.pop("password")
         user_dict["hashed_password"] = self.password_helper.hash(password)
 
-        ####
+        #####
         user_dict["role_id"] = 1
-        ####
+        #####
 
         created_user = await self.user_db.create(user_dict)
 

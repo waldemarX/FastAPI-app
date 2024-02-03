@@ -1,15 +1,16 @@
 import uuid
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi_users import FastAPIUsers
 from auth.manager import get_user_manager
-from models.models import UserTable
+from auth.models import User
 
 from auth.auth import auth_backend
 from auth.schemas import UserCreate, UserRead
 
 app = FastAPI(title="Trading App")
 
-fastapi_users = FastAPIUsers[UserTable, uuid.UUID](
+
+fastapi_users = FastAPIUsers[User, uuid.UUID](
     get_user_manager,
     [auth_backend],
 )
@@ -25,3 +26,11 @@ app.include_router(
     prefix="/auth",
     tags=["auth"],
 )
+
+
+current_user = fastapi_users.current_user()
+
+
+@app.get("/protected-route")
+def protected_route(user: User = Depends(current_user)):
+    return f"Hello, {user.email}"
