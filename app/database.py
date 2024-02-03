@@ -12,12 +12,10 @@ from sqlalchemy.ext.asyncio import (
 
 from auth.models import User
 from base_class import Base
-from config import DB_PASSWORD, DB_USERNAME, DB_HOST, DB_NAME
+from config import DB_PASSWORD, DB_USERNAME, DB_HOST, DB_NAME, DB_PORT
 
 
-DATABASE_URL = (
-    f"postgresql+asyncpg://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-)
+DATABASE_URL = f"postgresql+asyncpg://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
 engine = create_async_engine(DATABASE_URL)

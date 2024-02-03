@@ -13,7 +13,7 @@ sys.path.append(os.path.join(sys.path[0], "app"))
 
 
 from app.global_models import Base
-from app.config import DB_PASSWORD, DB_USERNAME, DB_NAME, DB_HOST
+from app.config import DB_PASSWORD, DB_USERNAME, DB_NAME, DB_HOST, DB_PORT
 
 
 # this is the Alembic Config object, which provides
@@ -26,6 +26,7 @@ config.set_section_option(section, "DB_USERNAME", DB_USERNAME)
 config.set_section_option(section, "DB_PASSWORD", DB_PASSWORD)
 config.set_section_option(section, "DB_NAME", DB_NAME)
 config.set_section_option(section, "DB_HOST", DB_HOST)
+config.set_section_option(section, "DB_PORT", DB_PORT)
 ############
 
 # Interpret the config file for Python logging.
