@@ -11,7 +11,7 @@ from fastapi_users import (
 )
 
 from .models import User
-from database import get_user_db
+from .utils import get_user_db
 from config import SECRET_KEY
 
 SECRET = SECRET_KEY

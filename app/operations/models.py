@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import TIMESTAMP, String
 from sqlalchemy.orm import Mapped, mapped_column
 from base_class import Base
@@ -12,5 +13,7 @@ class Operation(Base):
     instrument_type: Mapped[str] = mapped_column(
         String(length=240), nullable=True
     )
-    date: Mapped[str] = mapped_column(TIMESTAMP)
+    date: Mapped[str] = mapped_column(
+        TIMESTAMP, default=datetime.utcnow(), nullable=False
+    )
     type: Mapped[str] = mapped_column(String(length=240))
