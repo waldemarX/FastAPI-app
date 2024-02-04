@@ -1,22 +1,59 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import insert
-from .schemas import OperationCreate
 from database import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from fastapi_cache.decorator import cache
+
 from .models import Operation
+from .schemas import OperationCreate
+
+from asyncio import sleep
 
 
-router = APIRouter(prefix="/operations", tags=["Operations"])
+router = APIRouter()
 
 
-@router.get("/")
-async def get_specific_operations(
+@router.get("/all")
+async def get_all_operations(
+    limit: int = 10,
+    offset: int = 0,
     session: AsyncSession = Depends(get_async_session),
 ):
-    query = select(Operation)
-    result = await session.execute(query)
-    return result.scalars().all()
+    try:
+        query = select(Operation).limit(limit).offset(offset)
+        result = await session.execute(query)
+        return {
+            "status": "OK",
+            "data": result.scalars().all(),
+            "detail": None,
+        }
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail={"status": "error", "data": None, "detail": None},
+        )
+
+
+@router.get("/type")
+async def get_specific_operations(
+    operation_type: str,
+    session: AsyncSession = Depends(get_async_session),
+):
+    try:
+        query = select(Operation).where(Operation.type == operation_type)
+        result = await session.execute(query)
+        return {
+            "status": "OK",
+            "data": result.scalars().all(),
+            "detail": None,
+        }
+    except Exception:
+        raise HTTPException(
+            status_code=500,
+            detail={"status": "error", "data": None, "detail": None},
+        )
 
 
 @router.post("/")
@@ -27,4 +64,15 @@ async def add_specific_operations(
     statement = insert(Operation).values(**new_operation.model_dump())
     await session.execute(statement)
     await session.commit()
-    return {"status": "success"}
+    return {"status": "OK"}
+
+
+@router.get("/long_operation")
+@cache(expire=30)
+async def get_long_op():
+    await sleep(3)
+    return {
+        "status": "OK",
+        "data": "very long crud operation done!",
+        "detail": None
+    }
