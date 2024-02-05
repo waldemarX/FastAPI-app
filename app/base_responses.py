@@ -6,7 +6,7 @@ from fastapi import HTTPException
 
 def response_ok(data, detail=None):
     return {
-        "status": "200",
+        "status": "success",
         "data": data,
         "detail": detail
     }

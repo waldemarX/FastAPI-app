@@ -43,7 +43,7 @@ async def get_specific_operations(
         return response_error()
 
 
-@router.post("/")
+@router.post("/add")
 async def add_specific_operations(
     new_operation: OperationCreate,
     session: AsyncSession = Depends(get_async_session),

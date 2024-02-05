@@ -10,6 +10,7 @@ from base_class import Base
 
 class Role(Base):
     __tablename__ = "role"
+    __table_args__ = {'extend_existing': True}
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(length=120), nullable=False)
@@ -17,11 +18,13 @@ class Role(Base):
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
+    __table_args__ = {'extend_existing': True}
+
     id: Mapped[UUID_ID] = mapped_column(
         GUID, primary_key=True, default=uuid.uuid4
     )
     username: Mapped[str] = mapped_column(
-        String(length=150), unique=True, nullable=False
+        String(length=150), nullable=False
     )
     email: Mapped[str] = mapped_column(
         String(length=320), unique=True, nullable=False

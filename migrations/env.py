@@ -8,7 +8,6 @@ from alembic import context
 import os
 import sys
 
-
 sys.path.append(os.path.join(sys.path[0], "app"))
 
 
