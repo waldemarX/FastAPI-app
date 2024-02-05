@@ -8,7 +8,9 @@ from redis import asyncio as aioredis
 from auth.config import auth_backend
 from auth.config import fastapi_users
 from auth.schemas import UserCreate, UserRead
+
 from operations.router import router as router_operation
+from tasks.router import router as router_tasks
 
 from config import REDIS_HOST, REDIS_PORT
 
@@ -38,4 +40,10 @@ app.include_router(
     router_operation,
     prefix="/operations",
     tags=["Operations"]
+)
+
+app.include_router(
+    router_tasks,
+    prefix="/task",
+    tags=["Tasks"]
 )

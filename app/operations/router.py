@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy import insert
 from database import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +8,7 @@ from fastapi_cache.decorator import cache
 
 from .models import Operation
 from .schemas import OperationCreate
+from base_responses import response_error, response_ok
 
 from asyncio import sleep
 
@@ -24,16 +25,9 @@ async def get_all_operations(
     try:
         query = select(Operation).limit(limit).offset(offset)
         result = await session.execute(query)
-        return {
-            "status": "OK",
-            "data": result.scalars().all(),
-            "detail": None,
-        }
+        return response_ok(data=result.scalars().all())
     except Exception:
-        raise HTTPException(
-            status_code=500,
-            detail={"status": "error", "data": None, "detail": None},
-        )
+        return response_error()
 
 
 @router.get("/type")
@@ -44,16 +38,9 @@ async def get_specific_operations(
     try:
         query = select(Operation).where(Operation.type == operation_type)
         result = await session.execute(query)
-        return {
-            "status": "OK",
-            "data": result.scalars().all(),
-            "detail": None,
-        }
+        return response_ok(data=result.scalars().all())
     except Exception:
-        raise HTTPException(
-            status_code=500,
-            detail={"status": "error", "data": None, "detail": None},
-        )
+        return response_error()
 
 
 @router.post("/")
@@ -64,15 +51,11 @@ async def add_specific_operations(
     statement = insert(Operation).values(**new_operation.model_dump())
     await session.execute(statement)
     await session.commit()
-    return {"status": "OK"}
+    return response_ok(data="Operation successfully added!")
 
 
 @router.get("/long_operation")
 @cache(expire=30)
 async def get_long_op():
     await sleep(3)
-    return {
-        "status": "OK",
-        "data": "very long crud operation done!",
-        "detail": None
-    }
+    return response_ok(data="very long crud operation done!")
