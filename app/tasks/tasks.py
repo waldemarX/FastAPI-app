@@ -16,16 +16,17 @@ from config import (
 celery = Celery("tasks", broker=f"redis://{REDIS_HOST}:{REDIS_PORT}")
 
 
-def get_email_random_cat(username: str):
+def get_email_cat(username: str):
     email = EmailMessage()
     email["Subject"] = "Trade"
     email["From"] = SMTP_USER
     email["To"] = SMTP_USER  # user email: email['To'] = user@mail.com
+    cat_img = "https://cataas.com/cat"
 
     email.set_content(
         "<div>"
-        f"<h1> Hello, {username}, here's your random cat:</h1>"
-        "<img src='https://cataas.com/cat'"
+        f"<h1> Hello, {username}, here's your cat:</h1>"
+        f"<img src='{cat_img}'"
         "</div>",
         subtype="html",
     )
@@ -33,8 +34,8 @@ def get_email_random_cat(username: str):
 
 
 @celery.task
-def send_email_random_cat(username: str):
-    email = get_email_random_cat(username)
+def send_email_cat(username: str):
+    email = get_email_cat(username)
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.send_message(email)
