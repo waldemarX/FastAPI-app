@@ -12,6 +12,8 @@ from auth.schemas import UserCreate, UserRead
 
 from operations.router import router as router_operation
 from tasks.router import router as router_tasks
+from pages.router import router as router_pages
+from chat.router import router as router_chat
 
 from config import REDIS_HOST, REDIS_PORT
 
@@ -65,4 +67,16 @@ app.include_router(
     router_tasks,
     prefix="/task",
     tags=["Tasks"]
+)
+
+app.include_router(
+    router_pages,
+    prefix="/pages",
+    tags=["Pages"]
+)
+
+app.include_router(
+    router_chat,
+    prefix="/chat",
+    tags=["chat"]
 )
