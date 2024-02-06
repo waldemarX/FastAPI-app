@@ -1,1 +1,1 @@
-![FastAPI microservices (1)](https://github.com/waldemarX/sample-FastAPI-app/assets/145784290/cc6622ee-f14b-4708-a490-e6c9f93c4ed5)
+![FastAPI microservices (2)](https://github.com/waldemarX/sample-FastAPI-app/assets/145784290/5dbcc279-4b19-46f4-bded-eeb84ff9c071)
