@@ -38,7 +38,9 @@ async def get_specific_operations(
     try:
         query = select(Operation).where(Operation.type == operation_type)
         result = await session.execute(query)
-        return response_ok(data=result.scalars().all())
+        return response_ok(
+            data=result.scalars().all()
+        )
     except Exception:
         return response_error()
 
