@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
@@ -21,7 +22,25 @@ async def lifespan(app: FastAPI):
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
     yield
 
+
 app = FastAPI(title="Trading App", lifespan=lifespan)
+
+
+origins = ["http://127.0.0.1:8000/"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+    allow_headers=[
+        "Content-Type",
+        "Set-Cookie",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Origin",
+        "Authorization",
+    ],
+)
 
 
 app.include_router(

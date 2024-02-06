@@ -20,7 +20,6 @@ from app.config import (
 )
 from app.main import app
 
-# DATABASE
 DATABASE_URL_TEST = f"postgresql+asyncpg://{DB_USERNAME_TEST}:{DB_PASSWORD_TEST}@{DB_HOST_TEST}:{DB_PORT_TEST}/{DB_NAME_TEST}"
 
 engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)

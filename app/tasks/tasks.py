@@ -1,4 +1,5 @@
 import smtplib
+import requests
 from email.message import EmailMessage
 
 from celery import Celery
@@ -21,7 +22,9 @@ def get_email_cat(username: str):
     email["Subject"] = "Trade"
     email["From"] = SMTP_USER
     email["To"] = SMTP_USER  # user email: email['To'] = user@mail.com
-    cat_img = "https://cataas.com/cat"
+    cat_img = requests.get(
+        url="https://api.thecatapi.com/v1/images/search"
+    ).json()[0]["url"]
 
     email.set_content(
         "<div>"
