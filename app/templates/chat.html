@@ -19,7 +19,7 @@
 </div>
 <script>
     async function getLastMessages() {
-        const url = 'http://127.0.0.1:8000/chat/last_messages'
+        const url = '/chat/last_messages'
         const response = await fetch(url, {
             method: 'GET'
         })
